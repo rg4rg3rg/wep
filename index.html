@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORBIT WEB STUDIO | Demo Siteler</title>
+  <style>
+    :root{
+      --gold:#f6b73c;
+      --dark:#070707;
+      --card:#151515;
+      --muted:#bdbdbd;
+      --blue:#35a7ff;
+      --green:#50d890;
+      --orange:#ff8c32;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;background:var(--dark);color:#fff;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .topbar{position:fixed;top:0;left:0;width:100%;z-index:99;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);border-bottom:1px solid rgba(246,183,60,.18);display:flex;align-items:center;justify-content:space-between;padding:16px 7%}
+    .logo{font-size:22px;font-weight:900;color:var(--gold);letter-spacing:1px}
+    .nav a{margin-left:18px;font-weight:800;font-size:14px;color:#fff}
+    .nav a:hover{color:var(--gold)}
+    .hero{min-height:100vh;padding:115px 7% 65px;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 20% 20%, rgba(246,183,60,.17), transparent 30%),linear-gradient(rgba(0,0,0,.84),rgba(0,0,0,.92)),url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1700&q=80') center/cover}
+    .hero h1{font-size:55px;line-height:1.08;margin-bottom:14px}
+    .hero h1 span{color:var(--gold)}
+    .hero p{max-width:760px;margin:0 auto 28px;color:#e5e5e5;font-size:19px}
+    .badge{display:inline-block;border:1px solid rgba(246,183,60,.55);color:#ffd987;background:rgba(246,183,60,.08);padding:9px 15px;border-radius:999px;margin-bottom:18px;font-weight:800}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:20px;max-width:1180px;margin:35px auto 0}
+    .demo-card{background:linear-gradient(145deg,#171717,#0c0c0c);border:1px solid rgba(255,255,255,.08);border-radius:24px;overflow:hidden;transition:.25s;text-align:left;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+    .demo-card:hover{transform:translateY(-8px);border-color:rgba(246,183,60,.55)}
+    .demo-img{height:165px;background-size:cover;background-position:center}
+    .demo-body{padding:20px}
+    .demo-body h3{font-size:22px;color:var(--gold);margin-bottom:7px}
+    .demo-body p{color:var(--muted);font-size:14px;margin-bottom:14px}
+    .btn{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--gold);color:#111;font-weight:900}
+    .btn:hover{filter:brightness(1.08)}
+    section{padding:75px 7%}
+    .section-title{text-align:center;margin-bottom:34px}
+    .section-title small{color:var(--gold);font-weight:900;letter-spacing:2px}
+    .section-title h2{font-size:40px;margin-top:6px}
+    .hidden{display:none!important}
+    .demo-page{padding-top:90px;min-height:100vh}
+    .back{position:fixed;right:22px;bottom:22px;z-index:120;background:var(--gold);color:#111;padding:13px 18px;border-radius:999px;font-weight:900;box-shadow:0 12px 30px rgba(246,183,60,.25)}
+    .site-hero{min-height:74vh;display:flex;align-items:center;padding:70px 7%;border-radius:0 0 34px 34px;background-size:cover;background-position:center;position:relative;overflow:hidden}
+    .site-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(0,0,0,.55))}
+    .site-hero-content{position:relative;max-width:700px}
+    .site-hero h2{font-size:54px;line-height:1.06;margin-bottom:14px}
+    .site-hero p{font-size:19px;color:#e3e3e3;margin-bottom:20px}
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .feature,.product,.service,.review,.contact-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px}
+    .feature b,.product h3,.service h3,.contact-card h3{color:var(--gold)}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:22px}
+    .product{overflow:hidden;padding:0}
+    .product-img{height:170px;background-size:cover;background-position:center}
+    .product-body{padding:19px}
+    .price{font-size:22px;font-weight:900;margin-top:10px}
+    .whatsapp{background:#25D366;color:#07160b;padding:10px 14px;border-radius:999px;font-weight:900;display:inline-block;margin-top:12px}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+    .split img{width:100%;border-radius:24px;min-height:320px;object-fit:cover}
+    input,textarea,select{width:100%;padding:14px;border-radius:14px;border:1px solid #333;background:#090909;color:#fff;margin-bottom:12px}
+    textarea{min-height:100px}
+    iframe{width:100%;height:300px;border:0;border-radius:22px;filter:grayscale(.2) invert(.9);margin-top:22px}
+    footer{text-align:center;background:#000;color:#aaa;padding:25px}
+    @media(max-width:800px){
+      .hero h1,.site-hero h2{font-size:38px}
+      .nav{display:none}
+      .split{grid-template-columns:1fr}
+      .topbar{padding:14px 5%}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo">ORBIT WEB STUDIO</div>
+    <div class="nav">
+      <a href="#" onclick="showHome()">Demo Seç</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#iletisim">İletişim</a>
+    </div>
+  </div>
+
+  <main id="home">
+    <section class="hero">
+      <div>
+        <div class="badge">MÜŞTERİYE GÖSTERİMLİK DEMO PORTFÖY</div>
+        <h1>Hangi <span>Demo Siteyi</span> Görmek İstersiniz?</h1>
+        <p>Restoran, oto yıkama, lojistik ve tarım firmaları için hazırlanmış modern, mobil uyumlu demo web siteleri.</p>
+        <p style="color:#ffd987;font-weight:900;margin-top:-10px">Web sitesi için iletişim: +66 95 698 3585</p>
+        <div class="demo-grid">
+          <div class="demo-card">
+            <div class="demo-img" style="background-image:url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="demo-body">
+              <h3>🍽️ Restoran Demo</h3>
+              <p>Görselli menü, WhatsApp sipariş, rezervasyon ve harita.</p>
+              <a class="btn" onclick="showDemo('restoran')">Demo Gör</a>
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-img" style="background-image:url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="demo-body">
+              <h3>🚗 Oto Yıkama Demo</h3>
+              <p>Paketler, randevu formu, hizmetler ve WhatsApp iletişim.</p>
+              <a class="btn" onclick="showDemo('oto')">Demo Gör</a>
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-img" style="background-image:url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="demo-body">
+              <h3>🚛 Lojistik Demo</h3>
+              <p>Nakliyat, teklif formu, araç filosu ve hizmet tanıtımı.</p>
+              <a class="btn" onclick="showDemo('lojistik')">Demo Gör</a>
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-img" style="background-image:url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80')"></div>
+            <div class="demo-body">
+              <h3>🌾 Tarım Demo</h3>
+              <p>Ürünler, kurumsal tanıtım, çiftçi hizmetleri ve iletişim.</p>
+              <a class="btn" onclick="showDemo('tarim')">Demo Gör</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hizmetler">
+      <div class="section-title">
+        <small>ORBIT HİZMETLER</small>
+        <h2>Ne Sunuyoruz?</h2>
+      </div>
+      <div class="features">
+        <div class="feature"><b>Mobil Uyumlu</b><p>Telefon, tablet ve bilgisayarda düzgün görünüm.</p></div>
+        <div class="feature"><b>WhatsApp Butonu</b><p>Müşteri tek tıkla işletmeye mesaj atabilir.</p></div>
+        <div class="feature"><b>Google Harita</b><p>İşletmenin konumu siteye eklenir.</p></div>
+        <div class="feature"><b>Hızlı Teslimat</b><p>Basit sitelerde hızlı demo ve teslim süreci.</p></div>
+      </div>
+    </section>
+
+    <section id="iletisim">
+      <div class="section-title">
+        <small>İLETİŞİM</small>
+        <h2>Teklif Al</h2>
+      </div>
+      <div class="split">
+        <div>
+          <h2 style="color:var(--gold);font-size:38px">İşletmeniz İçin Site Yapalım</h2>
+          <p style="color:var(--muted);margin:15px 0">Restoran, oto yıkama, nakliyat, tarım firması ve benzeri işletmeler için profesyonel web sitesi tasarımı.</p>
+          <p style="font-size:20px;color:var(--gold);font-weight:900;margin:12px 0">☎ +66 95 698 3585</p><a class="btn" href="https://wa.me/66956983585">WhatsApp\'tan Yaz</a>
+        </div>
+        <form onsubmit="contactForm(event)">
+          <input id="cname" placeholder="Ad Soyad / İşletme Adı" required>
+          <input id="cphone" placeholder="Telefon" required>
+          <select id="ctype">
+            <option>Restoran Sitesi</option>
+            <option>Oto Yıkama Sitesi</option>
+            <option>Lojistik Sitesi</option>
+            <option>Tarım Firması Sitesi</option>
+            <option>Diğer</option>
+          </select>
+          <textarea id="cmsg" placeholder="Kısaca ne istediğinizi yazın"></textarea>
+          <button class="btn" type="submit">WhatsApp ile Gönder</button>
+        </form>
+      </div>
+    </section>
+    <footer>© 2026 ORBIT WEB STUDIO | Demo Portföy</footer>
+  </main>
+
+  <main id="restoran" class="demo-page hidden">
+    <a class="back" onclick="showHome()">← Demo Seç</a>
+    <div class="site-hero" style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1700&q=80')">
+      <div class="site-hero-content">
+        <div class="badge">RESTORAN DEMO</div>
+        <h2>Lezzet Konağı</h2>
+        <p>Görselli menü, WhatsApp sipariş, rezervasyon ve konum bilgisiyle modern restoran sitesi.</p>
+        <a class="btn" href="#restoran-menu">Menüyü Gör</a>
+      </div>
+    </div>
+    <section><div class="features"><div class="feature"><b>Online Menü</b><p>Ürünler görselli ve fiyatlı listelenir.</p></div><div class="feature"><b>WhatsApp Sipariş</b><p>Tek tıkla sipariş alınır.</p></div><div class="feature"><b>Rezervasyon</b><p>Masa ayırtma formu eklenir.</p></div></div></section>
+    <section id="restoran-menu"><div class="section-title"><small>MENÜ</small><h2>Popüler Lezzetler</h2></div><div class="products">
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Urfa Kebap</h3><p>Köz biber ve lavaş ile.</p><div class="price">280 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Sipariş</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Lahmacun</h3><p>Bol malzemeli taş fırın.</p><div class="price">85 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Sipariş</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Künefe</h3><p>Sıcak ve bol peynirli.</p><div class="price">180 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Sipariş</a></div></div>
+    </div></section>
+    <section><div class="split"><div><h2 style="color:var(--gold)">Rezervasyon</h2><p style="color:var(--muted)">Müşteri formu doldurur, WhatsApp'a yönlendirilir.</p></div><form onsubmit="demoWp(event,'Restoran rezervasyonu')"><input placeholder="Ad Soyad" required><input placeholder="Telefon" required><textarea placeholder="Rezervasyon notu"></textarea><button class="btn">WhatsApp'a Gönder</button></form></div></section>
+  </main>
+
+  <main id="oto" class="demo-page hidden">
+    <a class="back" onclick="showHome()">← Demo Seç</a>
+    <div class="site-hero" style="background-image:url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1700&q=80')">
+      <div class="site-hero-content"><div class="badge">OTO YIKAMA DEMO</div><h2>Parlak Oto Yıkama</h2><p>Detaylı iç dış temizlik, seramik kaplama ve hızlı randevu sistemi.</p><a class="btn" href="#oto-paket">Paketleri Gör</a></div>
+    </div>
+    <section><div class="features"><div class="feature"><b>Randevu</b><p>WhatsApp üzerinden hızlı randevu.</p></div><div class="feature"><b>Paketler</b><p>Fiyatlı temizlik paketleri.</p></div><div class="feature"><b>Galeri</b><p>Önce/sonra görselleri eklenebilir.</p></div></div></section>
+    <section id="oto-paket"><div class="section-title"><small>PAKETLER</small><h2>Oto Yıkama Paketleri</h2></div><div class="products">
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>İç Dış Yıkama</h3><p>Hızlı ve ekonomik temizlik.</p><div class="price">350 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Randevu Al</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Detaylı Temizlik</h3><p>Koltuk, torpido ve zemin temizliği.</p><div class="price">900 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Randevu Al</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Seramik Koruma</h3><p>Premium boya koruma hizmeti.</p><div class="price">2500 TL</div><a class="whatsapp" href="https://wa.me/66956983585">Randevu Al</a></div></div>
+    </div></section>
+  </main>
+
+  <main id="lojistik" class="demo-page hidden">
+    <a class="back" onclick="showHome()">← Demo Seç</a>
+    <div class="site-hero" style="background-image:url('https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=1700&q=80')">
+      <div class="site-hero-content"><div class="badge">LOJİSTİK DEMO</div><h2>Bozkurtlar Lojistik</h2><p>Fabrika yükleri, kısa dorse tır taşımacılığı ve hızlı teklif sistemi.</p><a class="btn" href="#lojistik-hizmet">Hizmetleri Gör</a></div>
+    </div>
+    <section id="lojistik-hizmet"><div class="section-title"><small>HİZMETLER</small><h2>Taşımacılık Çözümleri</h2></div><div class="features">
+      <div class="feature"><b>Fabrika Yükleri</b><p>Planlı yük alımı ve teslimat.</p></div><div class="feature"><b>Kısa Dorse</b><p>Uygun araçlarla güvenli taşıma.</p></div><div class="feature"><b>Takip No</b><p>Yük takip sistemi eklenebilir.</p></div>
+    </div></section>
+    <section><div class="split"><div><h2 style="color:var(--gold)">Teklif Al</h2><p style="color:var(--muted)">Yük bilgisi yazılır, WhatsApp ile firmaya gider.</p></div><form onsubmit="demoWp(event,'Lojistik teklif talebi')"><input placeholder="Firma Adı" required><input placeholder="Telefon" required><textarea placeholder="Yük ve güzergah bilgisi"></textarea><button class="btn">Teklif İste</button></form></div></section>
+  </main>
+
+  <main id="tarim" class="demo-page hidden">
+    <a class="back" onclick="showHome()">← Demo Seç</a>
+    <div class="site-hero" style="background-image:url('https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?auto=format&fit=crop&w=1700&q=80')">
+      <div class="site-hero-content"><div class="badge">TARIM DEMO</div><h2>Alkanlar Tarım</h2><p>Tohum, gübre, zirai ürün ve çiftçi destek hizmetleri için kurumsal web sitesi.</p><a class="btn" href="#tarim-urun">Ürünleri Gör</a></div>
+    </div>
+    <section id="tarim-urun"><div class="section-title"><small>ÜRÜNLER</small><h2>Tarım Ürünleri</h2></div><div class="products">
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Tohum Çeşitleri</h3><p>Mevsime uygun kaliteli tohumlar.</p><a class="whatsapp" href="https://wa.me/66956983585">Bilgi Al</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Gübre Ürünleri</h3><p>Verim artırmaya yönelik çözümler.</p><a class="whatsapp" href="https://wa.me/66956983585">Bilgi Al</a></div></div>
+      <div class="product"><div class="product-img" style="background-image:url('https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=900&q=80')"></div><div class="product-body"><h3>Zirai Destek</h3><p>Çiftçilere ürün ve danışmanlık.</p><a class="whatsapp" href="https://wa.me/66956983585">Bilgi Al</a></div></div>
+    </div></section>
+  </main>
+
+  <script>
+    const pages = ['home','restoran','oto','lojistik','tarim'];
+    function showDemo(id){
+      pages.forEach(p=>document.getElementById(p).classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
+    function showHome(){
+      pages.forEach(p=>document.getElementById(p).classList.add('hidden'));
+      document.getElementById('home').classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
+    function contactForm(e){
+      e.preventDefault();
+      const name=document.getElementById('cname').value;
+      const phone=document.getElementById('cphone').value;
+      const type=document.getElementById('ctype').value;
+      const msg=document.getElementById('cmsg').value;
+      const text=`Merhaba, web sitesi teklifi almak istiyorum.%0Aİsim/İşletme: ${name}%0ATelefon: ${phone}%0ASite Türü: ${type}%0ANot: ${msg}`;
+      window.open(`https://wa.me/66956983585?text=${text}`,'_blank');
+    }
+    function demoWp(e,title){
+      e.preventDefault();
+      const fields=[...e.target.querySelectorAll('input, textarea')].map(x=>x.value).join('%0A');
+      window.open(`https://wa.me/66956983585?text=${title}%0A${fields}`,'_blank');
+    }
+  </script>
+</body>
+</html>
