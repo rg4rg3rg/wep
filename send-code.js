@@ -1,12 +1,18 @@
-const RESEND_KEY_SALT = "ORBIT-RESEND-2026";
-const RESEND_KEY_PAYLOAD = "PTcdGhxlNSYfMQwbZV97R30XMzEZGEMFFzkrCh1ldXwGeAo9";
-const FROM_EMAIL = "ORBIT <onboarding@resend.dev>";
-const SUPPORT_EMAIL = "orbit.platform.tr@gmail.com";
+const nodemailer = require("nodemailer");
+
+const EMAIL_USER = "orbit.platform.tr@gmail.com";
+const SUPPORT_EMAIL = EMAIL_USER;
+const MAIL_KEY_SALT = "ORBIT-GMAIL-2026";
+const MAIL_KEY_PAYLOAD = "ICE7MHRIMDogaTlUQUoSTDYrLQ==";
 
 function decodeSecret(payload, saltText) {
   const encrypted = Buffer.from(payload, "base64");
   const salt = Buffer.from(saltText, "utf8");
   return Buffer.from(encrypted.map((byte, index) => byte ^ salt[index % salt.length])).toString("utf8");
+}
+
+function gmailPassword() {
+  return (process.env.EMAIL_PASS || decodeSecret(MAIL_KEY_PAYLOAD, MAIL_KEY_SALT)).replace(/\s+/g, "");
 }
 
 function htmlTemplate(code, purpose) {
@@ -33,7 +39,11 @@ function htmlTemplate(code, purpose) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: JSON.stringify({ message: "Sadece POST desteklenir." }) };
+    return {
+      statusCode: 405,
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ message: "Sadece POST desteklenir." }),
+    };
   }
 
   try {
@@ -43,32 +53,39 @@ exports.handler = async (event) => {
     const purpose = String(body.purpose || "register");
 
     if (!email.includes("@") || !code.match(/^\d{6}$/)) {
-      return { statusCode: 400, body: JSON.stringify({ message: "E-posta veya kod hatalı." }) };
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ message: "E-posta veya kod hatalı." }),
+      };
     }
 
-    const apiKey = process.env.RESEND_API_KEY || decodeSecret(RESEND_KEY_PAYLOAD, RESEND_KEY_SALT);
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: EMAIL_USER,
+        pass: gmailPassword(),
       },
-      body: JSON.stringify({
-        from: process.env.ORBIT_FROM_EMAIL || FROM_EMAIL,
-        to: email,
-        subject: `ORBIT doğrulama kodun: ${code}`,
-        html: htmlTemplate(code, purpose),
-        text: `ORBIT doğrulama kodun: ${code}. Bu kod 5 dakika geçerlidir.`,
-      }),
     });
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      return { statusCode: 500, body: JSON.stringify({ message: data.message || "Mail gönderilemedi." }) };
-    }
+    await transporter.sendMail({
+      from: `"ORBIT" <${EMAIL_USER}>`,
+      to: email,
+      subject: `ORBIT doğrulama kodun: ${code}`,
+      html: htmlTemplate(code, purpose),
+      text: `ORBIT doğrulama kodun: ${code}. Bu kod 5 dakika geçerlidir.`,
+    });
 
-    return { statusCode: 200, body: JSON.stringify({ sent: true, id: data.id || null }) };
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ sent: true, message: "Kod mail adresine gönderildi." }),
+    };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ message: error.message || "Sunucu hatası." }) };
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ message: error.message || "Mail gönderilemedi." }),
+    };
   }
 };
