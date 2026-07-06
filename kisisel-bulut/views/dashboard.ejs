@@ -1,0 +1,113 @@
+<header class="topbar">
+  <a class="brand" href="/dashboard">
+    <span class="logo logo-small"><i class="fa-solid fa-cloud" aria-hidden="true"></i></span>
+    <span>Kişisel Bulut</span>
+  </a>
+  <div class="topbar-actions">
+    <span class="user-chip"><i class="fa-regular fa-user" aria-hidden="true"></i> <%= username %></span>
+    <form action="/logout" method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="icon-button" type="submit" title="Çıkış yap" aria-label="Çıkış yap">
+        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+      </button>
+    </form>
+  </div>
+</header>
+
+<main class="dashboard-shell">
+  <section class="dashboard-heading">
+    <div>
+      <p class="eyebrow">Bulut alanım</p>
+      <h1>Dosyalarım</h1>
+      <p class="muted"><%= files.length %> dosya güvenli alanında.</p>
+    </div>
+    <label class="search-box" for="file-search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input id="file-search" type="search" placeholder="Dosyalarda ara…" autocomplete="off">
+    </label>
+  </section>
+
+  <section class="upload-card" aria-labelledby="upload-title">
+    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div id="drop-zone" class="drop-zone">
+        <input id="file" name="file" type="file" required>
+        <div class="upload-orb"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
+        <div>
+          <h2 id="upload-title">Dosyanı buraya bırak</h2>
+          <p>veya seçmek için tıkla · En fazla <%= maxFileSizeMb %> MB</p>
+          <p id="selected-file" class="selected-file" aria-live="polite"></p>
+        </div>
+      </div>
+      <div id="upload-progress" class="progress-wrap" hidden>
+        <div class="progress-meta">
+          <span><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Yükleniyor</span>
+          <strong id="progress-value">0%</strong>
+        </div>
+        <div class="progress-track"><span id="progress-bar"></span></div>
+      </div>
+      <button id="upload-button" class="button button-primary upload-button" type="submit">
+        <i class="fa-solid fa-upload" aria-hidden="true"></i> Yüklemeyi başlat
+      </button>
+    </form>
+  </section>
+
+  <section class="files-section" aria-labelledby="files-title">
+    <div class="section-title">
+      <h2 id="files-title">Tüm dosyalar</h2>
+      <span><%= files.length %> öğe</span>
+    </div>
+
+    <% if (files.length === 0) { %>
+      <div id="empty-state" class="empty-state">
+        <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+        <h3>Henüz dosya yok</h3>
+        <p>İlk dosyanı yukarıdaki alandan yükle.</p>
+      </div>
+    <% } else { %>
+      <div id="file-grid" class="file-grid">
+        <% files.forEach((file) => { %>
+          <article class="file-card" data-filename="<%= file.name.toLocaleLowerCase('tr-TR') %>">
+            <div class="file-card-top">
+              <span class="file-type"><i class="fa-regular fa-file" aria-hidden="true"></i></span>
+              <div class="file-actions">
+                <a class="icon-button" href="/files/<%= encodeURIComponent(file.id) %>/download"
+                  title="İndir" aria-label="<%= file.name %> dosyasını indir">
+                  <i class="fa-solid fa-download" aria-hidden="true"></i>
+                </a>
+                <form action="/files/<%= encodeURIComponent(file.id) %>/delete" method="post"
+                  data-delete-form>
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button class="icon-button icon-danger" type="submit" title="Sil"
+                    aria-label="<%= file.name %> dosyasını sil">
+                    <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <h3 title="<%= file.name %>"><%= file.name %></h3>
+            <p><span><%= formatBytes(file.size) %></span><span><%= formatDate(file.modifiedAt) %></span></p>
+          </article>
+        <% }) %>
+      </div>
+      <div id="search-empty" class="empty-state" hidden>
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <h3>Eşleşen dosya yok</h3>
+        <p>Başka bir arama terimi dene.</p>
+      </div>
+    <% } %>
+  </section>
+</main>
+
+<div id="toast-region" class="toast-region" aria-live="polite">
+  <% if (message) { %>
+    <div class="toast toast-success" data-toast>
+      <i class="fa-solid fa-circle-check" aria-hidden="true"></i><span><%= message %></span>
+    </div>
+  <% } %>
+  <% if (error) { %>
+    <div class="toast toast-error" data-toast>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span><%= error %></span>
+    </div>
+  <% } %>
+</div>
